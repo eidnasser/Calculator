@@ -8,6 +8,7 @@
 
 #import "CalculatorViewController.h"
 #import "Calculatorbrain.h"
+#include <math.h>
 
 @interface CalculatorViewController ()
 @property (nonatomic) BOOL userinthemiddleofenteringnumber;
@@ -33,40 +34,35 @@
 {
     NSString *digit=[sender currentTitle];
     
-if (self.userinthemiddleofenteringnumber )
-{
-    self.display.text = [self.display.text stringByAppendingString:digit] ;
-    self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:digit] ;
-    self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:@" " ] ;
+    if (self.userinthemiddleofenteringnumber ){
+        self.display.text = [self.display.text stringByAppendingString:digit];
+    } else{
+        self.display.text = digit;
+        self.userinthemiddleofenteringnumber = YES;
+    }
+}
 
-} else
-{
-    self.display.text=digit;
-    self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:digit] ;
-    self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:@" " ] ;
-    self.userinthemiddleofenteringnumber = YES;
-}
-}
 - (IBAction)floatPressed:(UIButton *)sender {
-    NSString *flotPoint =[sender currentTitle];
-    NSLog(@"flotpoint=%c",self.floatPressedOrNo);
-        if (self.floatPressedOrNo )
-        {
-        self.display.text = [self.display.text stringByAppendingString:flotPoint] ;
-            
-
+    NSString *floatPoint =[sender currentTitle];
+    if (!self.floatPressedOrNo ){
+        if(!self.userinthemiddleofenteringnumber){
+            self.display.text = @"0" ;
+            self.userinthemiddleofenteringnumber = YES;
+        }
+        self.display.text = [self.display.text stringByAppendingString:floatPoint];
         self.floatPressedOrNo=YES;
-        
-        
     }
 }
 
 - (IBAction)EnterPressed
 {
     [self.brain pushOperant:[self.display.text doubleValue]];
-    self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:@" " ] ;
-   
-     self.userinthemiddleofenteringnumber= NO;
+    if(self.userinthemiddleofenteringnumber){
+        self.DisplayAll.text = [self.DisplayAll.text stringByAppendingFormat:@"%g ",[self.display.text doubleValue]] ;
+    }
+    
+    self.userinthemiddleofenteringnumber= NO;
+    self.floatPressedOrNo=NO;
     
 }
 
@@ -80,21 +76,22 @@ if (self.userinthemiddleofenteringnumber )
     NSString *opration =[sender currentTitle];
     if ([@"C" isEqualToString:opration])
     {
-        self.DisplayAll.text =@" ";
+        self.DisplayAll.text =@"";
         double result=[self.brain performOperation:opration];
         self.display.text = [NSString stringWithFormat:@"%g",result];
-        self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:@" " ] ;
-        self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:[NSString stringWithFormat:@"%g",result]] ;
 
+    }
+    else if([opration isEqualToString:@"π"]){
+        [self.brain pushOperant:M_PI];
+        //self.display.text = [self.display.text stringByAppendingFormat:@"%g",M_PI] ;
+        self.DisplayAll.text = [self.DisplayAll.text stringByAppendingFormat:@"%@ ",opration];
     }
     else
     {
-    self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:[sender currentTitle]] ;
-    double result=[self.brain performOperation:opration];
-    self.display.text = [NSString stringWithFormat:@"%g",result];
-        self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:@" " ] ;
-        self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:[NSString stringWithFormat:@"%g",result]] ;
-
+        self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:[sender currentTitle]] ;
+        double result=[self.brain performOperation:opration];
+        self.display.text = [NSString stringWithFormat:@"%g",result];
+        self.DisplayAll.text = [self.DisplayAll.text stringByAppendingString:@" "];
     }
 }
 
