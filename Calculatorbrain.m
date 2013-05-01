@@ -99,9 +99,6 @@
         [self clearOperand];
         return 0;
     }
-    else if([opration isEqualToString:@"+ / -"]){
-        result = -1 * [self popOperand];
-    }
     
     [self pushOperant:result];
     

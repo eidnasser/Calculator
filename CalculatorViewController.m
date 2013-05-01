@@ -57,9 +57,7 @@
 - (IBAction)EnterPressed
 {
     [self.brain pushOperant:[self.display.text doubleValue]];
-    if(self.userinthemiddleofenteringnumber){
-        self.DisplayAll.text = [self.DisplayAll.text stringByAppendingFormat:@"%g ",[self.display.text doubleValue]] ;
-    }
+    self.DisplayAll.text = [self.DisplayAll.text stringByAppendingFormat:@"%g ",[self.display.text doubleValue]] ;
     
     self.userinthemiddleofenteringnumber= NO;
     self.floatPressedOrNo=NO;
@@ -68,12 +66,16 @@
 
 
 - (IBAction)operationpressed:(id)sender {
+    NSString *opration =[sender currentTitle];
+    if([opration isEqualToString:@"+ / -"]){
+        self.display.text = [NSString stringWithFormat:@"%g",-1 * [self.display.text doubleValue]];
+        return;
+        
+    }
     if(self.userinthemiddleofenteringnumber)
     {
-      [self EnterPressed];
+            [self EnterPressed];
     }
-    
-    NSString *opration =[sender currentTitle];
     if ([@"C" isEqualToString:opration])
     {
         self.DisplayAll.text =@"";
