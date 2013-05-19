@@ -64,6 +64,21 @@
     
 }
 
+- (IBAction)backSpacePressed:(UIButton *)sender
+    {
+      
+        if ([self.display.text length]>1)
+        {
+            
+             self.display.text =[self.display.text substringToIndex:[self.display.text length ] - 1];
+        }
+        else
+        {
+            self.display.text = @"0";
+            self.userinthemiddleofenteringnumber= NO;
+            self.floatPressedOrNo=NO;
+        }
+    }
 
 - (IBAction)operationpressed:(id)sender {
     NSString *opration =[sender currentTitle];
