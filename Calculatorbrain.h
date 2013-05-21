@@ -12,6 +12,9 @@
 -(void)pushOperant:(double)operand;
 -(double)performOperation:(NSString *)opration;
 -(double)popOperand;
+@property (readonly)id program;
++(double) runProgram:(id)program;
++(NSString *) descriptionOfProgram:(id)program;
 
 
 
