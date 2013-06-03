@@ -28,12 +28,20 @@
 }
 
 
-
+-(NSMutableDictionary *)variableDictionary
+{ if(! _varDictionary)
+{
+    _varDictionary=[[NSMutableDictionary alloc] init];
+   
+}
+ return  _varDictionary;
+}
 -(void) setDictionaryOfValues:(NSDictionary *) varDict
 {
     NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"3",@"a",@"5",@"b",@"9",@"x", nil];
     
     _varDictionary=dict;
+    
 }
 
 -(void) setOperandStack:(NSMutableArray *)anArray{
@@ -120,16 +128,18 @@
 
 +(void) replaceProgram:(id) program variable:(NSString *) nameofVariable withValue:(NSNumber *) value
 {
+    
+    NSMutableDictionary * variabledictionary;
     NSMutableArray *stack1;
     if([program isKindOfClass:[NSArray class]])
     {
         stack1=[program mutableCopy];
     }
-    
+    variabledictionary=[variabledictionary mutableCopy];
     
     for(NSObject *item in program)
     {
-        if ([item isKindOfClass::[NSNumber Class]])
+        if ([item isKindOfClass:[NSNumber class]])
         {
             [stack1 addObject:item];
             
@@ -141,7 +151,7 @@
             }
             else
             {
-                [stack1 addObject:[Calculatorbrain valueForVariable ]];
+                [stack1 addObject:[Calculatorbrain valueForVariable:nameofVariable from:variabledictionary ]];
             
             }
         
